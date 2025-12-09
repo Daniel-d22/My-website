@@ -1,0 +1,425 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Stellar — Beautiful Starter Website</title>
+  <meta name="description" content="A fully styled, responsive starter website with animations, theme toggle, gallery and contact form." />
+
+  <!-- Google Font (fallback safe stacks included) -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* -------------------------
+       CSS Reset (tiny)
+       ------------------------- */
+    *,*::before,*::after{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;line-height:1.45;color:var(--text);background:var(--bg);-webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;}
+    img{max-width:100%;height:auto;display:block}
+    a{color:inherit;text-decoration:none}
+    button{font:inherit}
+
+    /* -------------------------
+       CSS Variables & Theme
+       ------------------------- */
+    :root{
+      --bg: #0f1724;
+      --card: #0b1220;
+      --muted: #9aa4b2;
+      --accent: #6ee7b7;
+      --accent-2: #60a5fa;
+      --glass: rgba(255,255,255,0.04);
+      --text: #e6eef6;
+      --radius: 12px;
+      --glass-2: rgba(255,255,255,0.03);
+      --shadow: 0 6px 20px rgba(2,6,23,0.6);
+      --glass-border: rgba(255,255,255,0.05);
+    }
+
+    /* light theme */
+    .light {
+      --bg: #f7fafc;
+      --card: #ffffff;
+      --muted: #4b5563;
+      --accent: #06b6d4;
+      --accent-2: #7c3aed;
+      --glass: rgba(2,6,23,0.03);
+      --glass-2: rgba(2,6,23,0.02);
+      --text: #0b1220;
+      --shadow: 0 6px 20px rgba(11,17,32,0.06);
+      --glass-border: rgba(11,17,32,0.06);
+    }
+
+    /* -------------------------
+       Layout & Utilities
+       ------------------------- */
+    .container{max-width:1100px;margin:0 auto;padding:2rem}
+    header{position:sticky;top:16px;z-index:40}
+    .nav-wrap{display:flex;gap:1rem;align-items:center;justify-content:space-between;padding:0.6rem 0;background:linear-gradient(180deg, transparent, transparent);border-radius:999px}
+    .brand{display:flex;gap:0.8rem;align-items:center}
+    .logo{
+      width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;color:#061124;font-weight:800;box-shadow:var(--shadow);
+      flex-shrink:0;font-size:18px
+    }
+    .nav{
+      display:flex;gap:1rem;align-items:center
+    }
+    nav a{padding:0.6rem 0.75rem;border-radius:9px;color:var(--muted);font-weight:600;transition:all .18s}
+    nav a:hover{color:var(--text);background:var(--glass);border:1px solid var(--glass-border)}
+    .cta-btn{background:linear-gradient(90deg,var(--accent),var(--accent-2));padding:0.6rem 1rem;border-radius:10px;color:#041124;font-weight:700;border:none;cursor:pointer;box-shadow:0 8px 30px rgba(20,40,60,0.15)}
+    .icon-btn{background:transparent;border:1px solid var(--glass-border);padding:0.45rem;border-radius:9px;color:var(--muted);cursor:pointer}
+
+    /* -------------------------
+       Hero
+       ------------------------- */
+    .hero{
+      display:grid;grid-template-columns:1fr 420px;gap:2rem;align-items:center;padding:3rem 0;
+    }
+    .hero-card{
+      background:linear-gradient(180deg,var(--glass), transparent);
+      border-radius:var(--radius);padding:2rem;border:1px solid var(--glass-border);box-shadow:var(--shadow);
+    }
+    .eyebrow{display:inline-block;padding:0.25rem 0.6rem;border-radius:999px;background:rgba(255,255,255,0.03);color:var(--accent);font-weight:700;margin-bottom:1rem}
+    h1{font-size:clamp(1.8rem,3.8vw,2.6rem);margin:0 0 0.6rem 0}
+    p.lead{color:var(--muted);margin:0 0 1.2rem}
+    .hero-actions{display:flex;gap:0.8rem;align-items:center;margin-top:1rem}
+    .stat-grid{display:flex;gap:1rem;margin-top:1.6rem}
+    .stat{background:var(--card);padding:0.8rem;border-radius:10px;border:1px solid var(--glass-border);min-width:86px;text-align:center}
+
+    /* -------------------------
+       Right Column Card
+       ------------------------- */
+    .feature-card{padding:1rem;border-radius:12px;border:1px solid var(--glass-border);background:linear-gradient(180deg,var(--card),transparent)}
+    .feature-card h3{margin:0 0 0.4rem 0}
+    .feature-list{display:grid;gap:0.6rem;margin-top:0.6rem}
+    .feature-item{display:flex;gap:0.8rem;align-items:center;padding:0.45rem;border-radius:8px;background:var(--glass-2)}
+    .feature-item svg{width:36px;height:36px;flex-shrink:0;border-radius:8px;padding:0.4rem;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#021024}
+
+    /* -------------------------
+       Sections: Features, Gallery, Pricing, Contact
+       ------------------------- */
+    section{margin:3rem 0}
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+    .card{background:var(--card);padding:1rem;border-radius:12px;border:1px solid var(--glass-border);box-shadow:var(--shadow);min-height:120px}
+    .feature-blob{display:flex;align-items:flex-start;gap:0.8rem}
+    .badge{display:inline-block;padding:0.35rem 0.6rem;background:var(--glass);border-radius:999px;font-weight:700;color:var(--muted);font-size:0.85rem}
+
+    /* Gallery */
+    .gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:0.6rem}
+    .gallery > *{border-radius:10px;overflow:hidden;height:160px}
+    .gallery .large{grid-column:span 2;height:320px}
+
+    /* Pricing */
+    .pricing-row{display:flex;gap:1rem;flex-wrap:wrap}
+    .price-card{flex:1;min-width:220px}
+    .price-amount{font-size:1.6rem;font-weight:800;color:var(--text)}
+    .price-duration{color:var(--muted);font-size:0.95rem}
+
+    /* Contact Form */
+    form{display:grid;gap:0.75rem}
+    .input,textarea{background:transparent;border:1px solid var(--glass-border);padding:0.8rem;border-radius:8px;color:var(--text);outline:none}
+    textarea{min-height:120px;resize:vertical}
+    .form-foot{display:flex;gap:0.8rem;align-items:center;justify-content:space-between}
+    .success{background:#052e1f;color:#bff0d8;padding:0.6rem;border-radius:8px;border:1px solid rgba(9,60,38,0.2)}
+
+    /* Footer */
+    footer{padding:2rem 0;color:var(--muted);text-align:center}
+
+    /* -------------------------
+       Small screens
+       ------------------------- */
+    @media (max-width:980px){
+      .hero{grid-template-columns:1fr;gap:1.2rem}
+      .gallery{grid-template-columns:repeat(2,1fr)}
+      .grid-3{grid-template-columns:repeat(2,1fr)}
+      nav{display:none}
+    }
+    @media (max-width:520px){
+      .gallery{grid-template-columns:1fr}
+      .stat-grid{flex-direction:column}
+      .nav-wrap{padding:0.4rem}
+      .logo{width:40px;height:40px}
+    }
+
+    /* -------------------------
+       Micro animations
+       ------------------------- */
+    .fade-up{opacity:0;transform:translateY(10px);animation:fadeUp .6s forwards}
+    .stagger-1{animation-delay:.06s}
+    .stagger-2{animation-delay:.12s}
+    .stagger-3{animation-delay:.18s}
+    @keyframes fadeUp{to{opacity:1;transform:none}}
+
+    /* Focus states for accessibility */
+    .input:focus, textarea:focus, .cta-btn:focus, .icon-btn:focus, nav a:focus {box-shadow:0 0 0 4px rgba(96,165,250,0.12);outline:none;border-color:var(--accent-2)}
+  </style>
+</head>
+<body class="">
+  <header class="container" role="banner">
+    <div class="nav-wrap">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">S★</div>
+        <div>
+          <div style="font-weight:800">Stellar</div>
+          <div style="font-size:12px;color:var(--muted)">Beautiful Starter Website</div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:0.6rem;align-items:center">
+        <nav aria-label="Primary navigation" class="nav">
+          <a href="#features">Features</a>
+          <a href="#gallery">Gallery</a>
+          <a href="#pricing">Pricing</a>
+          <a href="#contact">Contact</a>
+        </nav>
+
+        <button class="icon-btn" id="themeToggle" aria-pressed="false" title="Toggle theme">
+          🌗
+        </button>
+        <a class="cta-btn" href="#contact">Get Started</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" role="main">
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-card fade-up">
+        <span class="eyebrow">New • 2025</span>
+        <h1>Stellar — A modern starter website</h1>
+        <p class="lead">A fully responsive, accessible and beautifully styled starter template with interactive components — perfect for portfolios, small agencies, or SaaS landing pages.</p>
+
+        <div class="hero-actions">
+          <a class="cta-btn" href="#features">Explore features</a>
+          <button class="icon-btn" id="demoOpen">Preview demo</button>
+        </div>
+
+        <div class="stat-grid" aria-hidden="true">
+          <div class="stat">
+            <div style="font-weight:800;font-size:1.1rem">120+</div>
+            <div style="color:var(--muted);font-size:0.85rem">Projects</div>
+          </div>
+          <div class="stat">
+            <div style="font-weight:800;font-size:1.1rem">20k</div>
+            <div style="color:var(--muted);font-size:0.85rem">Users</div>
+          </div>
+          <div class="stat">
+            <div style="font-weight:800;font-size:1.1rem">99.9%</div>
+            <div style="color:var(--muted);font-size:0.85rem">Uptime</div>
+          </div>
+        </div>
+      </div>
+
+      <aside class="feature-card fade-up stagger-2" aria-labelledby="feature-title">
+        <h3 id="feature-title">What's inside</h3>
+        <p style="color:var(--muted);margin:0">Components you get out-of-the-box:</p>
+
+        <div class="feature-list">
+          <div class="feature-item">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2v20" stroke="#021024" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 12h20" stroke="#021024" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <div>
+              <div style="font-weight:700">Responsive grid</div>
+              <div style="color:var(--muted);font-size:0.9rem">Works across phones, tablets & desktop</div>
+            </div>
+          </div>
+
+          <div class="feature-item">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 12h18" stroke="#021024" stroke-width="2" stroke-linecap="round"/><path d="M12 3v18" stroke="#021024" stroke-width="2" stroke-linecap="round"/></svg>
+            <div>
+              <div style="font-weight:700">Interactive UI</div>
+              <div style="color:var(--muted);font-size:0.9rem">Theme toggle, modal, form validation</div>
+            </div>
+          </div>
+
+          <div class="feature-item">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 20h16" stroke="#021024" stroke-width="2" stroke-linecap="round"/><path d="M12 4v16" stroke="#021024" stroke-width="2" stroke-linecap="round"/></svg>
+            <div>
+              <div style="font-weight:700">Accessible</div>
+              <div style="color:var(--muted);font-size:0.9rem">Keyboard friendly & good contrast</div>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <!-- FEATURES -->
+    <section id="features" aria-labelledby="featuresTitle">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem">
+        <h2 id="featuresTitle">Features</h2>
+        <div class="badge">Built with HTML · CSS · JS</div>
+      </div>
+
+      <div class="grid-3" style="margin-top:1rem">
+        <div class="card fade-up stagger-1">
+          <h3 style="margin-top:0">Performance-first</h3>
+          <p style="color:var(--muted)">No heavy frameworks. Minimal, modern CSS with small JS for interactivity.</p>
+        </div>
+
+        <div class="card fade-up stagger-2">
+          <h3 style="margin-top:0">Design system ready</h3>
+          <p style="color:var(--muted)">Color variables, tokens, and components you can reuse and extend.</p>
+        </div>
+
+        <div class="card fade-up stagger-3">
+          <h3 style="margin-top:0">Form & validation</h3>
+          <p style="color:var(--muted)">Contact form with client-side validation and friendly error messages.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- GALLERY -->
+    <section id="gallery" aria-labelledby="galleryTitle">
+      <h2 id="galleryTitle">Gallery</h2>
+      <p style="color:var(--muted);margin-top:0.25rem">Example images using high-res placeholders.</p>
+
+      <div class="gallery" style="margin-top:1rem">
+        <div class="large" aria-hidden="true">
+          <picture>
+            <source srcset="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=60&auto=format&fit=crop 1200w, https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=60&auto=format&fit=crop 800w" />
+            <img alt="Ocean view" src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=60&auto=format&fit=crop" />
+          </picture>
+        </div>
+
+        <div aria-hidden="true"><img alt="Workspace" src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&q=60&auto=format&fit=crop" /></div>
+        <div aria-hidden="true"><img alt="Design mockup" src="https://images.unsplash.com/photo-1557800636-894a64c1696f?w=800&q=60&auto=format&fit=crop" /></div>
+        <div aria-hidden="true"><img alt="Laptop on desk" src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&q=60&auto=format&fit=crop" /></div>
+        <div aria-hidden="true"><img alt="Code on screen" src="https://images.unsplash.com/photo-1545235617-9465e1f6a9f7?w=800&q=60&auto=format&fit=crop" /></div>
+      </div>
+    </section>
+
+    <!-- PRICING -->
+    <section id="pricing" aria-labelledby="pricingTitle">
+      <h2 id="pricingTitle">Pricing</h2>
+      <p style="color:var(--muted)">Choose a plan that fits — all plans include full source files and free updates.</p>
+
+      <div class="pricing-row" style="margin-top:1rem">
+        <div class="card price-card">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div><strong>Starter</strong><div style="color:var(--muted);font-size:0.9rem">For personal projects</div></div>
+            <div style="text-align:right">
+              <div class="price-amount">$0</div>
+              <div class="price-duration">Forever • Free</div>
+            </div>
+          </div>
+          <ul style="margin-top:1rem;color:var(--muted);padding-left:1.1rem">
+            <li>Responsive layout</li>
+            <li>Basic components</li>
+            <li>Community support</li>
+          </ul>
+          <div style="margin-top:1rem">
+            <button class="cta-btn" aria-label="Choose Starter plan">Get Starter</button>
+          </div>
+        </div>
+
+        <div class="card price-card" style="border:2px solid rgba(255,255,255,0.06);">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div><strong>Pro</strong><div style="color:var(--muted);font-size:0.9rem">For freelancers & agencies</div></div>
+            <div style="text-align:right">
+              <div class="price-amount">$29</div>
+              <div class="price-duration">Monthly</div>
+            </div>
+          </div>
+          <ul style="margin-top:1rem;color:var(--muted);padding-left:1.1rem">
+            <li>All Starter features</li>
+            <li>Design system & tokens</li>
+            <li>Priority support</li>
+          </ul>
+          <div style="margin-top:1rem">
+            <button class="cta-btn" aria-label="Choose Pro plan">Choose Pro</button>
+          </div>
+        </div>
+
+        <div class="card price-card">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div><strong>Enterprise</strong><div style="color:var(--muted);font-size:0.9rem">Custom solutions</div></div>
+            <div style="text-align:right">
+              <div class="price-amount">Custom</div>
+              <div class="price-duration">Contact us</div>
+            </div>
+          </div>
+          <ul style="margin-top:1rem;color:var(--muted);padding-left:1.1rem">
+            <li>Everything in Pro</li>
+            <li>White glove support</li>
+            <li>Custom integrations</li>
+          </ul>
+          <div style="margin-top:1rem">
+            <a class="cta-btn" href="#contact">Contact sales</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" aria-labelledby="contactTitle">
+      <h2 id="contactTitle">Contact</h2>
+      <p style="color:var(--muted)">Send a message — client-side validation is included.</p>
+
+      <div class="grid-2" style="margin-top:1rem">
+        <div class="card">
+          <h3 style="margin-top:0">Get in touch</h3>
+          <p style="color:var(--muted)">We're happy to help you customize this template.</p>
+
+          <form id="contactForm" novalidate>
+            <label for="name" style="font-weight:700">Your name</label>
+            <input id="name" class="input" name="name" type="text" placeholder="Jane Doe" required minlength="2" />
+
+            <label for="email" style="font-weight:700">Email</label>
+            <input id="email" class="input" name="email" type="email" placeholder="you@example.com" required />
+
+            <label for="message" style="font-weight:700">Message</label>
+            <textarea id="message" name="message" placeholder="Tell us about your project..." required minlength="10"></textarea>
+
+            <div id="formFeedback" aria-live="polite" style="min-height:36px"></div>
+
+            <div class="form-foot">
+              <div style="display:flex;gap:0.5rem;align-items:center">
+                <input id="subscribe" type="checkbox" />
+                <label for="subscribe" style="color:var(--muted);font-size:0.95rem">Subscribe to updates</label>
+              </div>
+              <div style="display:flex;gap:0.6rem">
+                <button type="reset" class="icon-btn">Reset</button>
+                <button type="submit" class="cta-btn">Send message</button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <aside class="card" aria-labelledby="officeTitle">
+          <h3 id="officeTitle" style="margin-top:0">Our office</h3>
+          <p style="color:var(--muted)">Available Mon–Fri. We'll usually reply within 1 business day.</p>
+
+          <div style="margin-top:1rem">
+            <strong>Email</strong>
+            <div style="color:var(--muted)">hello@stellar.example</div>
+          </div>
+
+          <div style="margin-top:1rem">
+            <strong>Phone</strong>
+            <div style="color:var(--muted)">+1 (555) 123-4567</div>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap">
+        <div style="display:flex;gap:0.8rem;align-items:center">
+          <div class="logo" style="width:40px;height:40px">S★</div>
+          <div>
+            <div style="font-weight:700">Stellar</div>
+            <div style="font-size:12px;color:var(--muted)">Made with care • © <span id="year"></span></div>
+          </div>
+        </div>
+
+        <div style="color:var(--muted)">Built for learning — customize and ship!</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Modal (hidden) -->
+  <div id="demoModal" role="dialog" aria-modal="true" aria-hidden="true" style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:1.25rem;pointer-events:none;z-index:60">
+    <div id="demoBackdrop" style="position:absolute;inset:0;background:linear-gra
